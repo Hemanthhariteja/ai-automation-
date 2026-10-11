@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: techfix-automation-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AUTO_SEED_DEMO_DATA
+        value: "true"
+      - key: AI_PROVIDER
+        value: demo
+      - key: AI_FALLBACK_PROVIDER
+        value: demo
+      # Update this after the frontend is deployed — see docs/DEPLOYMENT.md.
+      # Comma-separated to keep local dev working alongside the deployed site.
+      - key: FRONTEND_ORIGIN
+        value: "http://localhost:5173"

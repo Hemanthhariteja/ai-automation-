@@ -1,0 +1,29 @@
+# Core backend (free/local)
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+alembic==1.18.4
+pydantic==2.10.4
+pydantic-settings==2.7.1
+email-validator==2.2.0
+python-dotenv==1.0.1
+
+# Auth (free/local)
+python-jose[cryptography]==3.3.0
+bcrypt==4.2.1
+python-multipart==0.0.20
+
+# HTTP client for optional free-tier AI APIs (free/local)
+httpx==0.28.1
+
+# Testing (free/local)
+pytest==8.3.4
+pytest-asyncio==0.25.2
+pytest-cov==6.0.0
+
+# --- Optional AI providers (install only if you use them) ---
+# ollama                 # optional, local model runner (free/local, requires Ollama app installed)
+# google-generativeai    # optional, Gemini free-tier API
+# huggingface_hub        # optional, Hugging Face free-tier inference
+# openai                 # optional, PAID — never required by this app
+# anthropic              # optional, PAID — never required by this app

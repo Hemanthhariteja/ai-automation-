@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Copper Spoon runs on The Pass</title>
+<meta name="description" content="A restaurant never misses an enquiry again — every table request, catering quote, and private-event DM read, scored, and routed automatically." />
+<style>
+  :root {
+    --ground: #FAF5EA;
+    --ground-raised: #FFFFFF;
+    --ticket: #FFFDF8;
+    --ink: #2A211A;
+    --ink-soft: #5B4E42;
+    --ink-faint: #8A7A6A;
+    --copper: #A8622C;
+    --copper-strong: #8F5023;
+    --patina: #4F7C70;
+    --rule: #DCCFBC;
+    --rule-strong: #C9B79E;
+    --shadow: rgba(42, 33, 26, 0.10);
+
+    --font-display: Rockwell, 'Roboto Slab', 'Sitka Small', Georgia, 'Times New Roman', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #1B1613;
+      --ground-raised: #221B16;
+      --ticket: #F1E9DA;
+      --ink: #EFE6D6;
+      --ink-soft: #C9BAA6;
+      --ink-faint: #8F8071;
+      --copper: #D48A4E;
+      --copper-strong: #E39C5F;
+      --patina: #7FB0A2;
+      --rule: #3B322A;
+      --rule-strong: #4A3F35;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+    :root:not([data-theme="light"]) .ticket-ink { color: #2A211A; }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #1B1613;
+    --ground-raised: #221B16;
+    --ticket: #F1E9DA;
+    --ink: #EFE6D6;
+    --ink-soft: #C9BAA6;
+    --ink-faint: #8F8071;
+    --copper: #D48A4E;
+    --copper-strong: #E39C5F;
+    --patina: #7FB0A2;
+    --rule: #3B322A;
+    --rule-strong: #4A3F35;
+    --shadow: rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="dark"] .ticket-ink { color: #2A211A; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+
+  img, svg { max-width: 100%; display: block; }
+
+  a { color: var(--copper-strong); }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--patina);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+  .brand .mark { color: var(--copper-strong); }
+  .topbar nav {
+    display: flex;
+    gap: 28px;
+    font-size: 0.92rem;
+  }
+  .topbar nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  .topbar nav a:hover { color: var(--copper-strong); }
+
+  /* ---------- hero: styled as a torn order ticket ---------- */
+  .hero-frame {
+    padding: 56px 0 64px;
+  }
+  .ticket {
+    background: var(--ticket);
+    color: var(--ink);
+    border-radius: 3px;
+    box-shadow: 0 18px 40px -18px var(--shadow), 0 1px 0 var(--rule-strong);
+    overflow: hidden;
+  }
+  .ticket-ink { color: var(--ink); }
+
+  .ticket-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6E5F4F;
+    border-bottom: 1px dashed var(--rule-strong);
+  }
+
+  .ticket-body {
+    padding: 44px 40px 40px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--copper-strong);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 22px;
+    text-wrap: balance;
+    max-width: 16ch;
+    color: #241D17;
+  }
+  .lede {
+    font-size: 1.14rem;
+    line-height: 1.6;
+    color: #4A3D31;
+    max-width: 54ch;
+    margin: 0 0 32px;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary {
+    background: var(--copper-strong);
+    color: #FFF8EF;
+  }
+  .btn-primary:hover { transform: translateY(-1px); background: #7A431C; }
+  .btn-secondary {
+    background: transparent;
+    color: #241D17;
+    border-color: var(--rule-strong);
+  }
+  .btn-secondary:hover { border-color: var(--copper-strong); color: var(--copper-strong); }
+
+  /* perforation divider */
+  .perf {
+    height: 1px;
+    background-image: repeating-linear-gradient(90deg, var(--rule-strong) 0 6px, transparent 6px 14px);
+    margin: 0 -40px 28px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  .stat dt {
+    font-family: var(--font-mono);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--copper-strong);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat dd {
+    margin: 4px 0 0;
+    font-size: 0.8rem;
+    color: #6E5F4F;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- problem band ---------- */
+  .problem {
+    padding: 8px 0 64px;
+  }
+  .problem blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+    line-height: 1.4;
+    font-weight: 500;
+    max-width: 30ch;
+    color: var(--ink);
+    border-left: 3px solid var(--patina);
+    padding-left: 24px;
+  }
+  .problem cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-top: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- ticket rail ---------- */
+  section { padding: 8px 0 64px; }
+  .section-head { margin-bottom: 30px; }
+  .section-head .eyebrow { color: var(--patina); }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0;
+    text-wrap: balance;
+    max-width: 22ch;
+  }
+
+  .rail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+  }
+  .stub {
+    background: var(--ground-raised);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 22px 20px 24px;
+    position: relative;
+  }
+  .stub .num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+  }
+  .stub h3 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 10px 0 8px;
+    color: var(--ink);
+  }
+  .stub p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .stub .snip {
+    position: absolute;
+    right: 18px;
+    top: 20px;
+    color: var(--rule-strong);
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- pipeline steps ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  .step {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 24px 22px;
+    background: var(--ground-raised);
+  }
+  .step .idx {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--copper-strong);
+    font-weight: 600;
+  }
+  .step h3 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    margin: 8px 0 8px;
+  }
+  .step p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ---------- trust band ---------- */
+  .trust {
+    background: var(--ground-raised);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 36px 36px;
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .trust .badge {
+    flex: 0 0 auto;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--patina);
+    color: var(--patina);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .trust .copy { flex: 1 1 360px; }
+  .trust h2 { margin-bottom: 10px; }
+  .trust p { margin: 0 0 10px; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.6; max-width: 62ch; }
+  .trust p:last-child { margin-bottom: 0; }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 40px 0 56px;
+  }
+  .foot-grid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .foot-cta h2 { margin-bottom: 10px; }
+  .foot-cta p { color: var(--ink-soft); font-size: 0.95rem; max-width: 46ch; margin: 0 0 18px; }
+  .foot-links {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .foot-links a {
+    display: block;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 8px;
+  }
+  .foot-links a:hover { color: var(--copper-strong); }
+  .fineprint {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    border-top: 1px dashed var(--rule);
+    padding-top: 18px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 720px) {
+    .ticket-body { padding: 34px 22px 30px; }
+    .perf { margin: 0 -22px 24px; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
+    .topbar nav { gap: 16px; font-size: 0.85rem; }
+    .trust { padding: 28px 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap topbar">
+    <div class="brand"><span class="mark">&#9670;</span> The Copper Spoon <span style="color:var(--ink-faint); font-weight:400;">&times; AI Automation Platform</span></div>
+    <nav>
+      <a href="#problem">The problem</a>
+      <a href="#pass">The pass</a>
+      <a href="#trust">Why it's free</a>
+    </nav>
+  </div>
+
+  <div class="wrap hero-frame">
+    <div class="ticket">
+      <div class="ticket-head">
+        <span>Order Ticket &nbsp;&middot;&nbsp; Table: Every Enquiry</span>
+        <span>No. 0001</span>
+      </div>
+      <div class="ticket-body">
+        <p class="eyebrow">Built for restaurants</p>
+        <h1>Nobody misses a table for twelve.</h1>
+        <p class="lede">
+          A dinner rush doesn't pause for a Messenger DM about a birthday party for
+          fourteen. This is the system that reads every enquiry the moment it lands —
+          web form or DM — scores it, and routes it, so nothing waits until after close.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="../90_SECOND_DEMO.md">Watch the 90-second demo</a>
+          <a class="btn btn-secondary" href="#pass">See how scoring works</a>
+        </div>
+        <div class="perf"></div>
+        <dl class="stat-row">
+          <div class="stat"><dt>2</dt><dd>intake channels, one pipeline</dd></div>
+          <div class="stat"><dt>4</dt><dd>enquiry types it knows</dd></div>
+          <div class="stat"><dt>0&ndash;100</dt><dd>transparent lead score</dd></div>
+          <div class="stat"><dt>&#8377;0</dt><dd>mandatory cost to run</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap problem" id="problem">
+    <blockquote>
+      &ldquo;Sorry for the late reply&rdquo; is the most expensive sentence
+      in a restaurant's inbox.
+      <cite>Every enquiry answered a day late is a table booked somewhere else.</cite>
+    </blockquote>
+  </div>
+
+  <div class="wrap" id="pass">
+    <section>
+      <div class="section-head">
+        <p class="eyebrow">The four tickets that get lost</p>
+        <h2>What's actually falling through</h2>
+      </div>
+      <div class="rail">
+        <div class="stub">
+          <span class="snip">&#9986;&#9986;</span>
+          <span class="num">01</span>
+          <h3>The DM sent at 9:40pm</h3>
+          <p>Instagram and Messenger enquiries get read whenever someone finally checks —
+             this reads them the moment they arrive, through the same pipeline as the
+             web form. No separate inbox to remember.</p>
+        </div>
+        <div class="stub">
+          <span class="snip">&#9986;&#9986;</span>
+          <span class="num">02</span>
+          <h3>The party of twelve, buried</h3>
+          <p>A private-event enquiry for forty guests looks identical to a "what are
+             your hours" question in a flat inbox. Group size and event type are scored
+             signals here, not guesswork — the big booking surfaces first.</p>
+        </div>
+        <div class="stub">
+          <span class="snip">&#9986;&#9986;</span>
+          <span class="num">03</span>
+          <h3>The copy-paste reply</h3>
+          <p>Replies are drafted from the restaurant's actual hours, services, and
+             contact info &mdash; never an invented price or a promise nobody made.</p>
+        </div>
+        <div class="stub">
+          <span class="snip">&#9986;&#9986;</span>
+          <span class="num">04</span>
+          <h3>The complaint nobody followed up on</h3>
+          <p>A cold-food complaint at 9pm shouldn't wait for morning. A rule fires the
+             instant it's classified &mdash; priority raised, owner notified, a
+             follow-up task logged.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <p class="eyebrow">How an enquiry moves through the pass</p>
+        <h2>From "someone typed something" to "here's what to do about it"</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="idx">01 &nbsp;Intake</div>
+          <h3>Same door, two ways in</h3>
+          <p>The public enquiry form or a Messenger message &mdash; both land in the
+             same queue, tagged by source.</p>
+        </div>
+        <div class="step">
+          <div class="idx">02 &nbsp;Read</div>
+          <h3>Classify &amp; extract</h3>
+          <p>Reservation, catering, private event, or delivery &mdash; plus whatever
+             details are actually there. Nothing guessed, nothing invented.</p>
+        </div>
+        <div class="step">
+          <div class="idx">03 &nbsp;Score</div>
+          <h3>A number you can explain</h3>
+          <p>Party size, urgency, budget, and event type add up to one 0&ndash;100
+             score &mdash; every factor visible, none of it a black box.</p>
+        </div>
+        <div class="step">
+          <div class="idx">04 &nbsp;Route</div>
+          <h3>A rule takes it from here</h3>
+          <p>Escalate, notify the owner, draft a reply, or log a follow-up &mdash;
+             automatically, the moment the ticket is scored.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="trust">
+      <div class="trust">
+        <div class="badge">&#8377;0<br />/mo</div>
+        <div class="copy">
+          <h2>Runs on nothing</h2>
+          <p>No API key required, no subscription, no card on file. The AI layer has
+             a built-in Demo Mode that classifies, scores, and drafts replies entirely
+             offline &mdash; that's the guaranteed path, not a limited trial of one.</p>
+          <p>This is a working student capstone project, shown here with a fictional
+             restaurant (The Copper Spoon) as its example business &mdash; not a live
+             commercial product. Everything above is a real, running feature you can
+             try in the demo, not a mockup.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <div class="foot-cta">
+        <h2>See it read a real enquiry</h2>
+        <p>The full walkthrough takes about ten minutes; the tight version takes
+           ninety seconds and shows the whole loop &mdash; enquiry in, AI reasoning,
+           workflow firing, dashboard updating.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="../DEMO_GUIDE.md">Read the full demo guide</a>
+        </div>
+      </div>
+      <div class="foot-links">
+        <a href="../../README.md">Project README</a>
+        <a href="../CASE_FOR_RESUME.md">How it's built</a>
+        <a href="../PROJECT_REPORT.md">Full project report</a>
+      </div>
+    </div>
+    <p class="fineprint">
+      The Copper Spoon is a fictional demo business used to showcase this
+      project's restaurant-vertical configuration. This page is outreach
+      material for a college capstone project, not a live business or a
+      solicitation.
+    </p>
+  </footer>
+
+</body>
+</html>
